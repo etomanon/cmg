@@ -7,7 +7,8 @@ const main = async () => {
   try {
     const filePath = path.join(__dirname, "sample", "sample.txt");
     const logContentsStr = await fs.readFile(filePath, { encoding: "utf-8" });
-    evaluateLogFile(logContentsStr);
+    const evaluated = evaluateLogFile(logContentsStr);
+    console.log('Result: ', evaluated)
   }
   catch(e) {
     console.log('Error: ', e)
