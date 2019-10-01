@@ -1,6 +1,5 @@
 const endOfLine = require("os").EOL;
 
-const { validateSensor } = require("./utils");
 const config = require("./config");
 
 const evaluateLogFile = logContentsStr => {
@@ -8,29 +7,35 @@ const evaluateLogFile = logContentsStr => {
   const header = lines[0].split(" ");
   const content = lines.slice(1);
   const sensorTypes = Object.keys(config);
+
+  // final result with sensor names & quality control evaluations
   let result = {};
+  // which config to use for evaluation
   let configCurrent = null;
+  // name of evaluated sensor
   let sensorName = null;
+  // all values of evaluated sensor
   let sensorValues = [];
+  // reference value for evaluated sensor
   let referenceValue = null;
+
+  // add new evaluated sensor
   const updateResult = () => {
-    const validatedSensor = validateSensor(
-      sensorName,
-      configCurrent,
-      referenceValue,
-      sensorValues
-    );
     result = {
-      ...validatedSensor,
+      [sensorName]: configCurrent.validate(referenceValue, sensorValues),
       ...result
     };
   };
+
   content.forEach((lineString, index) => {
     const line = lineString.split(" ");
+    // if no more lines then evaluate last sensor and exit
     if (index === content.length - 1) {
       updateResult();
       return;
     }
+    // if line has sensor type then evaluate previous sensor (if exists)
+    // and then update previous sensor variables with new ones
     const maybeType = line[0];
     if (sensorTypes.includes(maybeType)) {
       if (configCurrent) {
@@ -40,10 +45,13 @@ const evaluateLogFile = logContentsStr => {
       configCurrent = config[maybeType];
       sensorName = line[1];
       referenceValue = Number(header[configCurrent.headerIndex]);
-    } else {
+    }
+    // else add value for current sensor
+    else {
       sensorValues = [Number(line[1]), ...sensorValues];
     }
   });
+
   return result;
 };
 

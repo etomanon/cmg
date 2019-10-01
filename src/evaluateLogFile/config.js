@@ -2,7 +2,9 @@ const { mean, std } = require("mathjs");
 
 const config = {
   thermometer: {
+    // index for sensor type in header to get reference value
     headerIndex: 1,
+    // sensor type evaluation logic
     validate: (referenceValue, values) => {
       const meanValues = mean(values);
       const stdValues = std(values);

@@ -3,11 +3,11 @@ const path = require("path");
 
 const evaluateLogFile = require("./evaluateLogFile/evaluateLogFile");
 
-const filePath = path.join(__dirname, "sample", "sample.txt");
 const main = async () => {
   try {
-    const content = await fs.readFile(filePath, { encoding: "utf-8" });
-    evaluateLogFile(content);
+    const filePath = path.join(__dirname, "sample", "sample.txt");
+    const logContentsStr = await fs.readFile(filePath, { encoding: "utf-8" });
+    evaluateLogFile(logContentsStr);
   }
   catch(e) {
     console.log('Error: ', e)
