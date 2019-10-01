@@ -1,0 +1,15 @@
+{
+  "name": "cmg",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:etomanon/cmg.git",
+  "author": "Jan <etomanon@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "fs-extra": "^8.1.0",
+    "mathjs": "^6.2.2"
+  }
+}
